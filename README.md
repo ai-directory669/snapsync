@@ -1,199 +1,272 @@
 # SnapSync
 
-### Windows ↔ Android Clipboard Sync & Local File Transfer
+### Local Network Clipboard Sync for Android & Windows
 
-SnapSync is a free, open-source tool for sharing clipboard text and transferring files between Windows and Android devices over a local network.
+SnapSync is a free, open-source Flutter project designed to sync clipboard text between devices over a local network.
 
-No cloud storage is required for the core local workflow. Your devices communicate directly over the same local network.
-
----
-
-## ✨ What is SnapSync?
-
-Moving text and files between your phone and computer can be inconvenient when you have to email files to yourself, use cloud storage, or connect a cable.
-
-SnapSync is designed to make that process simpler.
-
-It focuses on two useful tasks:
-
-* 📋 **Clipboard Sync** — share text between Windows and Android
-* 📁 **Local File Transfer** — transfer files between devices over Wi-Fi
-
-The project is designed around local device-to-device communication rather than relying on a cloud storage service.
+It provides a simple way to send copied text from one device to another without relying on cloud clipboard services.
 
 ---
 
-## 🚀 Features
+## 📋 What is SnapSync?
+
+SnapSync focuses on one simple task:
+
+> **Move copied text between your devices over your local network.**
+
+For example, you can copy a link, note, code snippet, or other text on one device and send it to another device using the target device's local IP address.
+
+SnapSync uses a lightweight local HTTP server to receive clipboard data.
+
+---
+
+## ✨ Current Features
 
 ### 📋 Clipboard Sync
 
-Share copied text between your Windows computer and Android device.
+SnapSync can send and receive plain-text clipboard content between devices.
 
-Useful for:
+The current implementation allows you to:
 
-* Copying links from your phone to your PC
-* Moving short pieces of text between devices
-* Sharing notes or snippets
-* Transferring text without sending it through email or messaging apps
+* Copy text on your device
+* Enter the target device's local IP address
+* Send the current clipboard text
+* Receive clipboard text from another SnapSync instance
+* Automatically place received text into the device clipboard
 
-### 📁 Local Wi-Fi File Transfer
+### 🌐 Local Network Communication
 
-Transfer files between your Windows and Android devices through your local network.
+SnapSync communicates directly over the local network.
 
-Useful for:
+The current implementation uses:
 
-* Photos
-* Documents
-* Downloads
-* Small project files
-* Other files that you need to move between devices
+* Local IPv4 networking
+* HTTP communication
+* Port `8080`
+* A `/sync-clipboard` endpoint for receiving clipboard text
 
-### 🔒 Local & Privacy-Focused
+No cloud server is required for the basic clipboard-sync workflow.
 
-SnapSync is designed for local device communication.
+### ⚡ Simple Interface
 
-The core concept is simple: your Windows computer and Android device communicate over your local network instead of requiring a third-party cloud storage service.
+The current app provides a straightforward interface with:
 
-### ⚡ Automatic Device Discovery
-
-SnapSync is designed to make connecting devices on the same local network easier through automatic device discovery.
-
-### 🆓 Free & Open Source
-
-SnapSync is publicly available as an open-source project.
-
-You can inspect the source code, experiment with the project, report issues, and contribute improvements.
+* Target device IP input
+* **Send Copied Clipboard Now** button
+* Last synced data display
+* Clipboard synchronization handling
 
 ---
 
-## 💡 Why Use SnapSync?
+## 🔄 How SnapSync Works
 
-You may find SnapSync useful if you frequently move information between your phone and computer.
+The basic workflow is simple:
 
-Instead of:
+```text
+Device A
+   │
+   │ Copy text
+   ▼
+SnapSync
+   │
+   │ Local network
+   │ HTTP :8080
+   ▼
+SnapSync
+   │
+   ▼
+Device B Clipboard
+```
 
-**Phone → Cloud → Computer**
+### Step 1 — Run SnapSync
 
-or
+Run the SnapSync application on the devices you want to use.
 
-**Phone → Email/Chat → Computer**
+### Step 2 — Find the Target Device IP
 
-SnapSync aims to provide a simpler local workflow:
-
-**Android ↔ Local Network ↔ Windows**
-
-This can be especially useful when you want to keep routine file and clipboard transfers within your own local network.
-
----
-
-## 🖥️ Android + Windows
-
-SnapSync is built around a common everyday combination:
-
-**Android phone + Windows PC**
+The sending device needs the local IP address of the target device.
 
 For example:
 
-1. Open SnapSync on your devices.
-2. Connect the devices through the same local network.
-3. Discover the available device.
-4. Share clipboard text or transfer a file.
+```text
+192.168.1.15
+```
 
-The exact setup and available functionality may evolve as the project develops.
+### Step 3 — Enter the IP Address
+
+Enter the target device's local IP address in the SnapSync interface.
+
+### Step 4 — Send Clipboard Text
+
+Copy some text and press:
+
+**Send Copied Clipboard Now**
+
+SnapSync sends the clipboard text to the target device over the local network.
+
+### Step 5 — Receive the Text
+
+The receiving SnapSync instance accepts the clipboard data and places the received text into the device clipboard.
 
 ---
 
-## 🔐 Privacy
+## 🔒 Privacy & Network Design
 
-Privacy is one of the main ideas behind SnapSync.
+SnapSync is designed around local device-to-device communication.
 
-The project is designed for local communication rather than cloud-based file storage.
+The current implementation does not require a cloud clipboard service for the basic sync workflow.
 
-That means SnapSync can be useful when you do not want to use an online storage service simply to move a file or piece of text between your own devices.
+This can be useful when you want to move text between devices without sending it through an online clipboard or cloud storage platform.
 
-> **Important:** Local network communication does not automatically mean that every network environment is completely secure. Use SnapSync on networks you trust and follow the project's security guidance as the project develops.
+### Important Security Note
+
+The current implementation uses HTTP on the local network and does not currently provide authentication or encryption.
+
+For this reason:
+
+* Use SnapSync on networks you trust.
+* Avoid exposing port `8080` directly to the public internet.
+* Do not treat the current version as a secure solution for sensitive or confidential information.
+
+Security improvements can be added as the project evolves.
 
 ---
 
-## 🛠️ Project Status
+## 🛠️ Technology
 
-SnapSync is an open-source project under active development.
+SnapSync is built with **Flutter** and Dart.
 
-The current project focuses on:
+The current implementation uses:
 
-* Windows ↔ Android communication
-* Clipboard synchronization
-* Local Wi-Fi file transfer
-* Device discovery
+* Flutter
+* Dart
+* `shelf`
+* `shelf_router`
+* `http`
+* `clipboard_watcher`
+* Flutter Clipboard API
 
-Additional improvements and features may be added over time.
+The local server listens on IPv4 and uses port `8080` for clipboard synchronization.
 
 ---
 
 ## 📦 Getting Started
 
-Visit the repository and check the available project files and instructions:
+Clone the repository:
 
-**GitHub:**
-https://github.com/ai-directory669/snapsync
+```bash
+git clone https://github.com/ai-directory669/snapsync.git
+```
 
-As the project develops, installation and usage instructions may be expanded to make setup easier for new users.
+Enter the project directory:
 
----
+```bash
+cd snapsync
+```
 
-## 🎯 Who is SnapSync For?
+Install Flutter dependencies:
 
-SnapSync may be useful for:
+```bash
+flutter pub get
+```
 
-* Windows users with Android phones
-* Students moving notes and files between devices
-* Developers transferring snippets or project files
-* People who prefer local file transfer
-* Users looking for alternatives to cloud-based file sharing
+Then run the application using Flutter's normal run command for your target platform.
 
----
-
-## 🆚 SnapSync vs Cloud File Sharing
-
-| SnapSync                                        | Traditional Cloud Storage                |
-| ----------------------------------------------- | ---------------------------------------- |
-| Local network focused                           | Cloud server based                       |
-| Designed for device-to-device transfer          | Designed for online storage and syncing  |
-| No cloud storage required for the core workflow | Requires cloud infrastructure            |
-| Open source                                     | Usually proprietary                      |
-| Useful for quick local transfers                | Useful for accessing files from anywhere |
-
-SnapSync is not intended to replace full cloud storage platforms. Its goal is to make **local Windows ↔ Android transfers simpler**.
+> Make sure the devices can communicate with each other over the same local network.
 
 ---
 
-## 🌱 Future Direction
+## 🖥️ Android & Windows
 
-The project may evolve with improvements to:
+SnapSync is intended for use across devices such as Android phones and Windows computers where the Flutter application can run.
 
-* Installation experience
-* Clipboard synchronization
+The exact platform support and setup experience may evolve as development continues.
+
+Before using SnapSync for important data, test the application in your own network environment.
+
+---
+
+## 🎯 Useful For
+
+SnapSync can be useful for people who frequently move small pieces of text between devices.
+
+Examples include:
+
+* 🔗 URLs and web links
+* 📝 Notes and short text
+* 💻 Code snippets
+* 📋 Copied messages
+* 📄 Small pieces of document text
+* 🔢 Numbers or other plain-text information
+
+---
+
+## 💡 Why Local Clipboard Sync?
+
+Moving text between a phone and computer often involves:
+
+* Emailing the text to yourself
+* Sending it through a messaging app
+* Using a cloud clipboard
+* Opening cloud storage
+* Manually retyping information
+
+SnapSync explores a simpler alternative:
+
+**Android ↔ Local Network ↔ Windows**
+
+The goal is to make quick clipboard sharing possible without requiring a cloud-based clipboard service.
+
+---
+
+## 🚧 Current Limitations
+
+SnapSync is an early-stage project.
+
+The current version has some limitations:
+
+* Clipboard synchronization currently focuses on plain text.
+* The target device IP must currently be entered manually.
+* Automatic device discovery is not currently implemented.
+* File transfer is not currently implemented.
+* The current network communication uses HTTP.
+* Authentication and encryption are not currently implemented.
+* Network configuration may vary between devices and operating systems.
+
+These limitations may be addressed in future versions.
+
+---
+
+## 🌱 Future Development
+
+Possible future improvements include:
+
+* Automatic device discovery
+* Easier device pairing
+* Improved clipboard synchronization
+* Secure communication
+* Authentication
 * File transfer
-* Device discovery
-* User interface
-* Reliability and security
+* Better cross-platform support
+* Improved user interface
 
-Future functionality should be considered experimental until it is officially implemented and documented.
+These are future development ideas and are not necessarily available in the current version.
 
 ---
 
 ## 🤝 Contributing
 
-Found a bug or have an idea?
+SnapSync is an open-source project.
 
-You can:
+If you find a problem or have an idea for improvement, you can:
 
 * Open an issue
-* Suggest an improvement
+* Suggest a feature
 * Review the source code
-* Contribute to the project
+* Contribute improvements
 
-**Issues:**
+### Report an Issue
+
 https://github.com/ai-directory669/snapsync/issues
 
 ---
@@ -208,16 +281,12 @@ See the `LICENSE` file for details.
 
 ## 🔗 Links
 
-**Live Project Page:**
-https://ai-directory669.github.io/snapsync/
+### GitHub Repository
 
-**GitHub Repository:**
 https://github.com/ai-directory669/snapsync
 
-**Report an Issue:**
-https://github.com/ai-directory669/snapsync/issues
+### Live Project Page
 
----
+https://ai-directory669.github.io/snapsync/
 
-### Built as an independent open-source project focused on simple, local device-to-device sharing.
-
+### Report an Issue
